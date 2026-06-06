@@ -444,7 +444,7 @@ export default function PublicSite() {
                 return (
                   <div
                     key={cat.category}
-                    className={`card-glass p-6 section-reveal transition-all ${!enabled ? "opacity-40" : ""}`}
+                    className={`card-glass p-6 animate-fade-in transition-all ${!enabled ? "opacity-40" : ""}`}
                   >
                     <h3 className="font-[Orbitron] text-[#00d4ff] text-sm tracking-widest mb-6 pb-3 border-b border-[rgba(0,212,255,0.1)]">
                       {cat.category}
@@ -483,7 +483,7 @@ export default function PublicSite() {
               {BUNDLES.map((bundle) => (
                 <div
                   key={bundle.name}
-                  className="card-glass p-6 section-reveal relative hover:translate-y-[-8px] hover:shadow-[0_0_40px_rgba(0,212,255,0.2)] transition-all duration-300 group"
+                  className="card-glass p-6 animate-fade-in relative hover:translate-y-[-8px] hover:shadow-[0_0_40px_rgba(0,212,255,0.2)] transition-all duration-300 group"
                 >
                   {bundle.best && (
                     <span className="absolute -top-3 left-6 px-3 py-1 bg-[#00d4ff] text-black text-[10px] font-[Orbitron] font-bold tracking-wider rounded-sm">
@@ -630,28 +630,24 @@ export default function PublicSite() {
               {
                 href: "https://www.instagram.com/dzairstudio?igsh=MTdxOWxsZGk1aGtidw==",
                 label: "BUSINESS INSTAGRAM",
-                sub: "@dzairstudio",
                 icon: <FaInstagram size={24} />,
                 cls: "gradient-border gradient-border-pink",
               },
               {
                 href: "https://www.instagram.com/ai_dzair?igsh=MWMyNW1icDhjc21yYQ==",
                 label: "CONTENT INSTAGRAM",
-                sub: "@ai_dzair",
                 icon: <FaInstagram size={24} />,
                 cls: "gradient-border",
               },
               {
                 href: "https://wa.me/213560843444",
                 label: "WHATSAPP BUSINESS",
-                sub: "+213 560 84 34 44",
                 icon: <FaWhatsapp size={24} />,
                 cls: "gradient-border gradient-border-green",
               },
               {
                 href: "mailto:collabaidzair@proton.me",
                 label: "EMAIL US",
-                sub: "collabaidzair@proton.me",
                 icon: <Mail size={24} />,
                 cls: "gradient-border",
               },
@@ -661,13 +657,10 @@ export default function PublicSite() {
                 href={link.href}
                 target={link.href.startsWith("mailto") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                className={`${link.cls} flex items-center gap-4 px-8 py-5 rounded-xl hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(0,212,255,0.3)] transition-all duration-300 group min-w-[220px]`}
+                className={`${link.cls} flex items-center gap-4 px-8 py-5 rounded-xl hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(0,212,255,0.3)] transition-all duration-300 group min-w-[200px]`}
               >
                 <span className="text-[#00d4ff] group-hover:scale-110 transition-transform">{link.icon}</span>
-                <div>
-                  <div className="font-[Orbitron] text-xs tracking-wider text-white">{link.label}</div>
-                  <div className="text-[#a0a8b8] text-sm mt-0.5">{link.sub}</div>
-                </div>
+                <div className="font-[Orbitron] text-xs tracking-wider text-white">{link.label}</div>
               </a>
             ))}
           </div>
@@ -675,10 +668,6 @@ export default function PublicSite() {
           <div className="text-center space-y-2 text-sm text-[#5a6070] section-reveal">
             <p>Location: Tissemsilt, Algeria</p>
             <p>Working Hours: 24/7 (AI-powered efficiency)</p>
-            <a href="mailto:collabaidzair@proton.me" className="text-[#a0a8b8] hover:text-[#00d4ff] transition-colors inline-flex items-center gap-2">
-              <Mail size={14} />
-              collabaidzair@proton.me
-            </a>
           </div>
         </div>
       </section>
@@ -689,8 +678,8 @@ export default function PublicSite() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="text-center md:text-left">
               <div className="font-[Orbitron] text-[#00d4ff] font-bold text-xl tracking-widest mb-1">DZAIR STUDIO</div>
-              <p className="text-[#5a6070] text-sm">AI-Powered Digital Solutions</p>
-              <a href="mailto:collabaidzair@proton.me" className="text-[#5a6070] hover:text-[#00d4ff] text-sm transition-colors mt-1 flex items-center gap-1 justify-center md:justify-start">
+              <p className="text-[#5a6070] text-sm mb-1">AI-Powered Digital Solutions</p>
+              <a href="mailto:collabaidzair@proton.me" className="text-[#5a6070] hover:text-[#00d4ff] text-sm transition-colors flex items-center gap-1 justify-center md:justify-start">
                 <Mail size={12} />
                 collabaidzair@proton.me
               </a>

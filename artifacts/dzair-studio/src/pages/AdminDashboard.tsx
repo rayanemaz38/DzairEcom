@@ -81,7 +81,7 @@ export default function AdminDashboard() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const storedPw = localStorage.getItem("dzair_admin_password") || "dzair2026";
+    const storedPw = localStorage.getItem("dzair_admin_password") || "al3omda2010@";
     if (password === storedPw) {
       sessionStorage.setItem("dzair_admin", "true");
       setLoggedIn(true);
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
 
   const handlePwChange = (e: React.FormEvent) => {
     e.preventDefault();
-    const storedPw = localStorage.getItem("dzair_admin_password") || "dzair2026";
+    const storedPw = localStorage.getItem("dzair_admin_password") || "al3omda2010@";
     if (pwForm.current !== storedPw) { setPwMsg("error:Current password is incorrect"); return; }
     if (pwForm.next !== pwForm.confirm) { setPwMsg("error:New passwords do not match"); return; }
     localStorage.setItem("dzair_admin_password", pwForm.next);

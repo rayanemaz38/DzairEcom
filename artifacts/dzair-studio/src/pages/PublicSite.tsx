@@ -320,27 +320,29 @@ export default function PublicSite() {
               <p className="text-[#a0a8b8] text-lg">Four powerful solutions to accelerate your e-commerce business</p>
             </div>
 
-            <div
-              className="relative"
-              onMouseEnter={pauseAuto}
-            >
+            <div className="relative" onMouseEnter={pauseAuto}>
+              {/* Prev / Next arrows */}
               <button
                 onClick={() => { pauseAuto(); setActiveService((p) => (p - 1 + SERVICES.length) % SERVICES.length); }}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-[rgba(0,212,255,0.1)] border border-[rgba(0,212,255,0.3)] text-[#00d4ff] flex items-center justify-center hover:bg-[#00d4ff] hover:text-black transition-all hover:shadow-[0_0_20px_rgba(0,212,255,0.5)] -ml-6"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-[rgba(0,212,255,0.1)] border border-[rgba(0,212,255,0.3)] text-[#00d4ff] flex items-center justify-center hover:bg-[#00d4ff] hover:text-black transition-all hover:shadow-[0_0_20px_rgba(0,212,255,0.5)]"
               >
                 <ArrowLeft size={20} />
               </button>
               <button
                 onClick={() => { pauseAuto(); setActiveService((p) => (p + 1) % SERVICES.length); }}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-[rgba(0,212,255,0.1)] border border-[rgba(0,212,255,0.3)] text-[#00d4ff] flex items-center justify-center hover:bg-[#00d4ff] hover:text-black transition-all hover:shadow-[0_0_20px_rgba(0,212,255,0.5)] -mr-6"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-[rgba(0,212,255,0.1)] border border-[rgba(0,212,255,0.3)] text-[#00d4ff] flex items-center justify-center hover:bg-[#00d4ff] hover:text-black transition-all hover:shadow-[0_0_20px_rgba(0,212,255,0.5)]"
               >
                 <ArrowRight size={20} />
               </button>
 
-              <div className="overflow-hidden px-8">
+              {/* Slides — wrapper is N×100% wide so each slide = 100% of the viewport */}
+              <div className="overflow-hidden mx-12">
                 <div
-                  className="flex gap-6 transition-transform duration-500"
-                  style={{ transform: `translateX(calc(-${activeService * 100}% - ${activeService * 24}px))` }}
+                  className="flex transition-transform duration-500"
+                  style={{
+                    width: `${SERVICES.length * 100}%`,
+                    transform: `translateX(calc(-${activeService * (100 / SERVICES.length)}%))`,
+                  }}
                 >
                   {SERVICES.map((svc, idx) => {
                     const isActive = idx === activeService;
@@ -349,29 +351,32 @@ export default function PublicSite() {
                     return (
                       <div
                         key={svc.key}
-                        className="shrink-0 w-full transition-all duration-500"
+                        className="transition-all duration-500 px-3"
                         style={{
-                          transform: isActive ? "scale(1)" : "scale(0.88)",
-                          opacity: isActive ? 1 : 0.5,
+                          width: `${100 / SERVICES.length}%`,
+                          opacity: isActive ? 1 : 0.45,
+                          transform: isActive ? "scale(1)" : "scale(0.93)",
                         }}
                       >
-                        <div className="bg-[rgba(10,10,25,0.9)] backdrop-blur-[20px] border border-[rgba(0,212,255,0.2)] rounded-2xl flex flex-col md:flex-row overflow-hidden min-h-[360px] max-w-[680px] mx-auto">
-                          <div className="md:w-2/5 h-48 md:h-auto bg-[rgba(0,212,255,0.03)] flex items-center justify-center border-b md:border-b-0 md:border-r border-[rgba(0,212,255,0.1)] relative">
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,212,255,0.15)_0%,transparent_70%)]" />
-                            <Icon size={72} className="text-[#00d4ff] drop-shadow-[0_0_20px_rgba(0,212,255,0.8)] relative z-10" />
+                        <div className="bg-[rgba(10,10,25,0.9)] backdrop-blur-[20px] border border-[rgba(0,212,255,0.2)] rounded-2xl flex flex-col md:flex-row max-w-[680px] mx-auto">
+                          {/* Icon panel */}
+                          <div className="md:w-2/5 h-44 md:h-auto bg-[rgba(0,212,255,0.03)] flex items-center justify-center border-b md:border-b-0 md:border-r border-[rgba(0,212,255,0.1)] relative rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,212,255,0.15)_0%,transparent_70%)] rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none" />
+                            <Icon size={68} className="text-[#00d4ff] drop-shadow-[0_0_20px_rgba(0,212,255,0.8)] relative z-10" />
                           </div>
-                          <div className="flex-1 p-8 relative flex flex-col justify-between">
-                            <span className="absolute top-4 right-4 font-[Orbitron] text-7xl opacity-10 text-[#00d4ff] font-bold leading-none select-none">
+                          {/* Content panel */}
+                          <div className="flex-1 p-6 md:p-8 relative flex flex-col justify-between gap-4">
+                            <span className="absolute top-4 right-4 font-[Orbitron] text-6xl opacity-10 text-[#00d4ff] font-bold leading-none select-none pointer-events-none">
                               {svc.number}
                             </span>
                             <div>
-                              <h3 className="font-[Orbitron] text-xl font-bold text-white tracking-wider mb-2 pr-12">{svc.title}</h3>
-                              <p className="text-[#a0a8b8] text-sm leading-relaxed mb-4">{svc.desc}</p>
-                              <p className="text-[#00d4ff] font-[Orbitron] text-xl font-bold mb-4">FROM ${svc.price}</p>
-                              <ul className="space-y-2 mb-6">
+                              <h3 className="font-[Orbitron] text-lg font-bold text-white tracking-wider mb-2 pr-10">{svc.title}</h3>
+                              <p className="text-[#a0a8b8] text-sm leading-relaxed mb-3">{svc.desc}</p>
+                              <p className="text-[#00d4ff] font-[Orbitron] text-lg font-bold mb-3">FROM ${svc.price}</p>
+                              <ul className="space-y-1.5">
                                 {svc.features.map((f, i) => (
                                   <li key={i} className="flex items-center gap-2 text-sm text-[#a0a8b8]">
-                                    <Check size={14} className="text-[#00d4ff] shrink-0" />
+                                    <Check size={13} className="text-[#00d4ff] shrink-0" />
                                     {f}
                                   </li>
                                 ))}
@@ -401,12 +406,13 @@ export default function PublicSite() {
                 </div>
               </div>
 
+              {/* Dot indicators */}
               <div className="flex justify-center gap-3 mt-8">
                 {SERVICES.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => { pauseAuto(); setActiveService(i); }}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${i === activeService ? "bg-[#00d4ff] w-6" : "bg-[rgba(0,212,255,0.3)]"}`}
+                    className={`h-2 rounded-full transition-all duration-300 ${i === activeService ? "bg-[#00d4ff] w-6" : "bg-[rgba(0,212,255,0.3)] w-2"}`}
                   />
                 ))}
               </div>

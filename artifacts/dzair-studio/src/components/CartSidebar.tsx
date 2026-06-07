@@ -59,8 +59,6 @@ export default function CartSidebar({
 
     setStep('success');
     toast({ title: "Success", description: "Order confirmed!" });
-    
-    window.open(`https://wa.me/213560843444?text=New+order+${orderId}`, '_blank');
   };
 
   return (

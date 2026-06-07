@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   Code2, ShoppingCart, Camera, Play, MousePointer, ClipboardList,
   Rocket, Shield, Zap, DollarSign, Package, MapPin, Mail, ArrowLeft, ArrowRight,
-  ChevronUp, Check, Menu, X
+  ChevronUp, Check, Menu, X, Lock
 } from "lucide-react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import ParticleCanvas from "@/components/ParticleCanvas";
@@ -125,6 +125,16 @@ export default function PublicSite() {
   const [settings, setSettings] = useState<ServiceSettings>(() =>
     JSON.parse(localStorage.getItem("dzair_service_settings") || '{"landingPages":true,"ecommerceStores":true,"aiImages":true,"aiVideos":true}')
   );
+
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "dzair_service_settings" && e.newValue) {
+        setSettings(JSON.parse(e.newValue));
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   useReveal();
 
@@ -452,27 +462,32 @@ export default function PublicSite() {
                     key={cat.category}
                     className={`card-glass p-6 animate-fade-in transition-all ${!enabled ? "opacity-40" : ""}`}
                   >
-                    <h3 className="font-[Orbitron] text-[#00d4ff] text-sm tracking-widest mb-6 pb-3 border-b border-[rgba(0,212,255,0.1)]">
+                    <h3 className="font-[Orbitron] text-[#00d4ff] text-sm tracking-widest mb-6 pb-3 border-b border-[rgba(0,212,255,0.1)] flex items-center gap-2">
                       {cat.category}
+                      {!enabled && <Lock size={13} className="text-[#ff4444]" />}
                     </h3>
                     <div className="space-y-1">
                       {cat.tiers.map((tier) => (
                         <div
                           key={tier.name}
-                          className="flex items-center justify-between px-3 py-3 rounded hover:bg-[rgba(0,212,255,0.05)] group transition-colors cursor-default"
+                          className="flex items-center justify-between px-3 py-3 rounded hover:bg-[rgba(0,212,255,0.05)] transition-colors"
                         >
-                          <span className="text-[#a0a8b8] text-sm group-hover:text-white transition-colors">{tier.name}</span>
+                          <span className="text-[#a0a8b8] text-sm">{tier.name}</span>
                           <div className="flex items-center gap-3">
-                            <span className="font-[Orbitron] text-sm text-[#00d4ff] group-hover:[text-shadow:0_0_10px_rgba(0,212,255,0.6)] transition-all">
+                            <span className="font-[Orbitron] text-sm text-[#00d4ff]">
                               ${tier.price}
                             </span>
-                            {enabled && (
+                            {enabled ? (
                               <button
                                 onClick={() => addToCart(cat.category + " - " + tier.name, tier.price, tier.name)}
-                                className="px-3 py-1 text-[10px] font-[Orbitron] tracking-wider border border-[rgba(0,212,255,0.3)] text-[#00d4ff] rounded hover:bg-[#00d4ff] hover:text-black transition-all opacity-0 group-hover:opacity-100"
+                                className="px-3 py-1.5 text-[10px] font-[Orbitron] tracking-wider border border-[#00d4ff] text-[#00d4ff] rounded hover:bg-[#00d4ff] hover:text-black transition-all"
                               >
-                                SELECT
+                                ADD TO CART
                               </button>
+                            ) : (
+                              <span className="flex items-center gap-1 text-[10px] text-[#5a6070] font-[Orbitron]">
+                                <Lock size={11} /> UNAVAILABLE
+                              </span>
                             )}
                           </div>
                         </div>

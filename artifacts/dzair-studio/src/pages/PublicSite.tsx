@@ -82,6 +82,54 @@ const BUNDLES = [
   { name: "EMPIRE PACKAGE", was: 2320, now: 1900, best: false, items: ["Enterprise E-commerce Store", "Cinematic Landing Page", "25 AI Images (Cinematic)", "Campaign Video Pack", "1 Month Support + Consulting"] },
 ];
 
+const PLANS = [
+  {
+    id: "basic",
+    name: "BASIC",
+    price: 500,
+    badge: null,
+    accent: "rgba(0,212,255,0.15)",
+    features: [
+      "Complete and functional e-commerce store",
+      "Order management system",
+      "Instant notifications via Telegram",
+      "Pixel tracking setup (Facebook / TikTok Pixel)",
+      "Lifetime access",
+      "Payment after delivery",
+    ],
+  },
+  {
+    id: "standard",
+    name: "STANDARD",
+    price: 1000,
+    badge: "POPULAR",
+    accent: "rgba(0,102,255,0.18)",
+    features: [
+      "Everything in the Basic Plan",
+      "Custom tailored design for your identity",
+      "High-converting Landing Page",
+      "Lifetime access",
+      "Payment after delivery",
+    ],
+  },
+  {
+    id: "premium",
+    name: "PREMIUM",
+    price: 1500,
+    badge: "BEST VALUE",
+    accent: "rgba(120,60,255,0.18)",
+    features: [
+      "Highly professional e-commerce store",
+      "Everything in the Standard Plan",
+      "Direct integration with Algerian delivery companies",
+      "Custom .com domain name",
+      "Premium high-speed & secure hosting",
+      "24/7 dedicated technical support",
+      "Payment before delivery",
+    ],
+  },
+];
+
 const WHY_FEATURES = [
   { icon: Code2, title: "CUSTOM CODE, NO TEMPLATES", desc: "Hand-coded from scratch. No WordPress. No Shopify. Pure performance." },
   { icon: Zap, title: "AI-POWERED SPEED", desc: "Cinematic quality delivered in 48 hours, not weeks." },
@@ -121,6 +169,8 @@ export default function PublicSite() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showBackTop, setShowBackTop] = useState(false);
   const autoRef = useRef<number | null>(null);
+
+  const [expandedPlan, setExpandedPlan] = useState<string | null>(null);
 
   const [settings, setSettings] = useState<ServiceSettings>(() =>
     JSON.parse(localStorage.getItem("dzair_service_settings") || '{"landingPages":true,"ecommerceStores":true,"aiImages":true,"aiVideos":true}')
@@ -279,7 +329,7 @@ export default function PublicSite() {
             className="text-[#a0a8b8] text-lg max-w-xl mx-auto mb-10 animate-fade-slide-up opacity-0"
             style={{ animationDelay: "0.8s", animationFillMode: "forwards" }}
           >
-            Custom-coded stores, cinematic ads, and landing pages built with cutting-edge AI for Algerian e-commerce
+            Integrated digital solutions for e-commerce: design professional stores, high-converting landing pages, and innovative AI-powered advertisements to boost your sales.
           </p>
           <div
             className="flex flex-col md:flex-row gap-4 justify-center animate-fade-slide-up opacity-0"
@@ -315,6 +365,51 @@ export default function PublicSite() {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
           <div className="w-5 h-8 border-2 border-[rgba(0,212,255,0.4)] rounded-full flex justify-center">
             <div className="w-1 h-2 bg-[#00d4ff] rounded-full mt-1.5 animate-bounce" />
+          </div>
+        </div>
+      </section>
+
+      {/* ABOUT US */}
+      <section className="py-24 md:py-32 bg-[#050508]">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-14 section-reveal">
+            <h2 className="font-[Orbitron] text-4xl md:text-5xl font-bold text-white mb-4">
+              ABOUT <span className="text-[#00d4ff]">US</span>
+            </h2>
+            <div className="w-16 h-[2px] bg-gradient-to-r from-[#00d4ff] to-[#0066ff] mx-auto" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center section-reveal">
+            {/* Text block */}
+            <div>
+              <p className="text-[#c8d0e0] text-base md:text-lg leading-relaxed mb-6">
+                <span className="text-[#00d4ff] font-bold font-[Orbitron] text-sm tracking-widest">DZAIR STUDIO</span>
+                {" "}is your trusted digital partner in Algeria. We don't just build websites; we blend visual creativity, modern technology, and marketing strategies to help e-commerce entrepreneurs and startups transition into a highly professional market.
+              </p>
+              <p className="text-[#c8d0e0] text-base md:text-lg leading-relaxed">
+                We stand out by delivering tailored designs and unique visual identities that guarantee your business stands out from the competition.
+              </p>
+            </div>
+
+            {/* Stats / badges */}
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { value: "100%", label: "Custom Code" },
+                { value: "48H", label: "Delivery Speed" },
+                { value: "0", label: "Monthly Fees" },
+                { value: "DZ", label: "Market Expert" },
+              ].map((stat) => (
+                <div
+                  key={stat.label}
+                  className="card-glass p-6 text-center rounded-xl border border-[rgba(0,212,255,0.15)] hover:border-[rgba(0,212,255,0.4)] hover:shadow-[0_0_30px_rgba(0,212,255,0.1)] transition-all duration-300"
+                >
+                  <div className="font-[Orbitron] text-3xl font-bold text-[#00d4ff] [text-shadow:0_0_15px_rgba(0,212,255,0.5)] mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-[#a0a8b8] text-xs tracking-widest uppercase">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -534,6 +629,100 @@ export default function PublicSite() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* PLANS */}
+      <section className="py-24 md:py-32 bg-[#0a0a12]">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-16 section-reveal">
+            <h2 className="font-[Orbitron] text-4xl md:text-5xl font-bold text-white mb-4">
+              OUR <span className="text-[#00d4ff]">PLANS</span>
+            </h2>
+            <p className="text-[#a0a8b8] text-lg">Choose the plan that fits your ambition</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 section-reveal">
+            {PLANS.map((plan) => {
+              const isOpen = expandedPlan === plan.id;
+              const isPopular = plan.badge === "POPULAR";
+              const isBest = plan.badge === "BEST VALUE";
+              return (
+                <div
+                  key={plan.id}
+                  className={`relative rounded-2xl border transition-all duration-300 flex flex-col overflow-hidden ${
+                    isPopular
+                      ? "border-[#00d4ff] shadow-[0_0_30px_rgba(0,212,255,0.2)]"
+                      : isBest
+                      ? "border-[rgba(120,60,255,0.6)] shadow-[0_0_30px_rgba(120,60,255,0.15)]"
+                      : "border-[rgba(0,212,255,0.15)]"
+                  }`}
+                  style={{ background: `linear-gradient(135deg, #0a0a18, ${plan.accent})` }}
+                >
+                  {plan.badge && (
+                    <div className={`absolute top-0 right-0 px-3 py-1 text-[10px] font-[Orbitron] font-bold tracking-wider rounded-bl-lg ${
+                      isPopular ? "bg-[#00d4ff] text-black" : "bg-[rgba(120,60,255,0.9)] text-white"
+                    }`}>
+                      {plan.badge}
+                    </div>
+                  )}
+
+                  <div className="p-8 flex flex-col flex-1">
+                    <h3 className="font-[Orbitron] text-sm tracking-[4px] text-[#00d4ff] mb-2">{plan.name}</h3>
+                    <div className="font-[Orbitron] text-4xl font-bold text-white mb-1">
+                      ${plan.price.toLocaleString()}
+                    </div>
+                    <p className="text-[#5a6070] text-xs mb-6">one-time payment</p>
+
+                    {/* Check Offer toggle */}
+                    <button
+                      onClick={() => setExpandedPlan(isOpen ? null : plan.id)}
+                      className={`w-full py-2.5 rounded font-[Orbitron] text-xs tracking-widest flex items-center justify-center gap-2 transition-all duration-300 mb-4 ${
+                        isOpen
+                          ? "bg-[#00d4ff] text-black"
+                          : "border border-[#00d4ff] text-[#00d4ff] hover:bg-[rgba(0,212,255,0.1)]"
+                      }`}
+                    >
+                      {isOpen ? "HIDE DETAILS" : "CHECK OFFER"}
+                      <ChevronUp
+                        size={14}
+                        className={`transition-transform duration-300 ${isOpen ? "rotate-0" : "rotate-180"}`}
+                      />
+                    </button>
+
+                    {/* Expandable features list */}
+                    <div
+                      className="overflow-hidden transition-all duration-500"
+                      style={{ maxHeight: isOpen ? `${plan.features.length * 52}px` : "0px", opacity: isOpen ? 1 : 0 }}
+                    >
+                      <ul className="space-y-3 pt-2 border-t border-[rgba(0,212,255,0.1)]">
+                        {plan.features.map((feat, i) => (
+                          <li key={i} className="flex items-start gap-3 text-sm text-[#c8d0e0]">
+                            <Check size={14} className="text-[#00d4ff] shrink-0 mt-0.5" />
+                            {feat}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Add to Cart at bottom */}
+                    <div className="mt-auto pt-6">
+                      <button
+                        onClick={() => addToCart(`E-Commerce Store — ${plan.name} Plan`, plan.price)}
+                        className={`w-full py-3 font-[Orbitron] text-xs tracking-widest rounded transition-all duration-300 ${
+                          isPopular || isBest
+                            ? "bg-gradient-to-r from-[#00d4ff] to-[#0066ff] text-black font-bold hover:brightness-125 hover:shadow-[0_0_25px_rgba(0,212,255,0.4)]"
+                            : "border border-[rgba(0,212,255,0.4)] text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)]"
+                        }`}
+                      >
+                        ORDER NOW
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

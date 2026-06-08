@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 function Router() {
   return (
     <Switch>
-      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/secure-dashboard-77" component={AdminDashboard} />
       <Route path="/" component={PublicSite} />
       <Route component={NotFound} />
     </Switch>

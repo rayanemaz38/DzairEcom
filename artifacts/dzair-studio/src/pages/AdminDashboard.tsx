@@ -51,11 +51,23 @@ function SidebarItem({ icon: Icon, label, active, badge, onClick }: { icon: any;
   );
 }
 
+/* ---------- brute-force constants ---------- */
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS   = 15 * 60 * 1000; // 15 minutes
+const ATTEMPTS_KEY = "dzair_login_attempts";
+const LOCKOUT_KEY  = "dzair_lockout_until";
+
+function getRemainingLockout(): number {
+  const until = parseInt(localStorage.getItem(LOCKOUT_KEY) || "0", 10);
+  return Math.max(0, until - Date.now());
+}
+
 export default function AdminDashboard() {
   const [loggedIn, setLoggedIn] = useState(() => sessionStorage.getItem("dzair_admin") === "true");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [shake, setShake] = useState(false);
+  const [lockoutRemaining, setLockoutRemaining] = useState(() => getRemainingLockout());
   const [page, setPage] = useState<Page>("overview");
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -79,14 +91,45 @@ export default function AdminDashboard() {
     return () => clearInterval(t);
   }, []);
 
+  /* countdown ticker for lockout */
+  useEffect(() => {
+    if (lockoutRemaining <= 0) return;
+    const t = setInterval(() => {
+      const rem = getRemainingLockout();
+      setLockoutRemaining(rem);
+      if (rem <= 0) clearInterval(t);
+    }, 1000);
+    return () => clearInterval(t);
+  }, [lockoutRemaining]);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    if (getRemainingLockout() > 0) return;
+
+    /* validate password length to avoid DoS on comparison */
+    if (!password || password.length > 128) {
+      setLoginError("Invalid input.");
+      return;
+    }
+
     const storedPw = localStorage.getItem("dzair_admin_password") || "al3omda2010@";
     if (password === storedPw) {
+      localStorage.removeItem(ATTEMPTS_KEY);
+      localStorage.removeItem(LOCKOUT_KEY);
       sessionStorage.setItem("dzair_admin", "true");
       setLoggedIn(true);
     } else {
-      setLoginError("Access denied. Invalid password.");
+      const attempts = parseInt(localStorage.getItem(ATTEMPTS_KEY) || "0", 10) + 1;
+      localStorage.setItem(ATTEMPTS_KEY, String(attempts));
+      if (attempts >= MAX_ATTEMPTS) {
+        const until = Date.now() + LOCKOUT_MS;
+        localStorage.setItem(LOCKOUT_KEY, String(until));
+        localStorage.setItem(ATTEMPTS_KEY, "0");
+        setLockoutRemaining(LOCKOUT_MS);
+        setLoginError("Too many failed attempts. Locked out for 15 minutes.");
+      } else {
+        setLoginError(`Access denied. ${MAX_ATTEMPTS - attempts} attempt(s) remaining.`);
+      }
       setShake(true);
       setTimeout(() => setShake(false), 500);
     }
@@ -186,14 +229,23 @@ export default function AdminDashboard() {
             <input
               type="password"
               value={password}
+              maxLength={128}
+              autoComplete="current-password"
+              disabled={lockoutRemaining > 0}
               onChange={(e) => { setPassword(e.target.value); setLoginError(""); }}
               placeholder="Enter password..."
-              className="w-full bg-[#050508] border border-[rgba(0,212,255,0.2)] text-white px-4 py-3 rounded-lg outline-none focus:border-[#00d4ff] text-center tracking-[4px]"
+              className="w-full bg-[#050508] border border-[rgba(0,212,255,0.2)] text-white px-4 py-3 rounded-lg outline-none focus:border-[#00d4ff] text-center tracking-[4px] disabled:opacity-40 disabled:cursor-not-allowed"
             />
             {loginError && <p className="text-[#ff4444] text-sm">{loginError}</p>}
+            {lockoutRemaining > 0 && (
+              <p className="text-[#ffaa00] text-xs font-[Orbitron] tracking-wider">
+                LOCKED — try again in {Math.ceil(lockoutRemaining / 1000)}s
+              </p>
+            )}
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-[#00d4ff] to-[#0066ff] text-black font-[Orbitron] font-bold py-3 rounded-lg tracking-wider hover:brightness-110 transition-all"
+              disabled={lockoutRemaining > 0}
+              className="w-full bg-gradient-to-r from-[#00d4ff] to-[#0066ff] text-black font-[Orbitron] font-bold py-3 rounded-lg tracking-wider hover:brightness-110 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:brightness-100"
             >
               ENTER DASHBOARD
             </button>
